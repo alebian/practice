@@ -18,8 +18,8 @@ module LinearAlgebra
       @array[index] = value
     end
 
-    def +(vector)
-      sum(vector)
+    def +(other)
+      sum(other)
     end
 
     def sum(vector)
@@ -47,8 +47,8 @@ module LinearAlgebra
       answer
     end
 
-    def -(vector)
-      subtract(vector)
+    def -(other)
+      subtract(other)
     end
 
     def subtract(vector)
@@ -68,10 +68,10 @@ module LinearAlgebra
       self
     end
 
-    def ==(vector)
-      valid_argument?(vector)
+    def ==(other)
+      valid_argument?(other)
       (0..@max_index).each do |index|
-        return false if @array[index] != vector.at(index)
+        return false if @array[index] != other.at(index)
       end
       true
     end

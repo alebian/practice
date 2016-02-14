@@ -1,4 +1,4 @@
-module Primes
+class Primes
   def self.is_prime(number)
     return false if number <= 1
     return true if number == 2
@@ -10,13 +10,14 @@ module Primes
   end
 
   def self.primes_list(size)
-    answer = []
-    prime = 2
+    answer = [2]
+    size -= 1
+    number = 3
     while size > 0
-      while !is_prime(prime)
-        prime += 1
+      while !is_prime(number)
+        number += 2
       end
-      answer << prime
+      answer << number
       size -= 1
     end
     answer
