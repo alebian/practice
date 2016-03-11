@@ -1,3 +1,4 @@
+require_relative 'cryptography/test_message'
 require_relative 'linear_algebra/test_vector'
 require_relative 'linear_algebra/test_matrix'
 require_relative 'telephone/test_telephone'
