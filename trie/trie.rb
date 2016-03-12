@@ -18,7 +18,6 @@ class Trie
   private
 
   def final_node(word)
-    word = sanitize(word)
     idx = 0
     current = @root
     while idx < word.size
