@@ -1,6 +1,7 @@
 require_relative 'cryptography/test_message'
 require_relative 'linear_algebra/test_vector'
 require_relative 'linear_algebra/test_matrix'
+require_relative 'lists/immutable/strong_typed/single_linked_list'
 require_relative 'telephone/test_telephone'
 require_relative 'trie/test_trie'
 require_relative 'primes/test_primes'
