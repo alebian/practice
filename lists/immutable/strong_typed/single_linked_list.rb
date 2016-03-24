@@ -8,7 +8,7 @@ module Immutable
     end
 
     class SingleLinkedList
-      attr_reader :size, :type
+      attr_reader :size
 
       def initialize(elements = [])
         @size = elements.size
@@ -17,10 +17,15 @@ module Immutable
           @head = nil
           @tail = nil
         else
-          @type = elements[0].class
+          @type = elements[0].class.to_s.freeze
           raise ArgumentError, 'Unsafe type list.' unless valid_elements?(elements)
           add_elements(elements)
         end
+      end
+
+      def type
+        return nil if @type.nil?
+        @type.clone
       end
 
       def first
@@ -33,18 +38,29 @@ module Immutable
         nil
       end
 
+      def [](index)
+        return nil if index >= size
+        aux = 0
+        current = @head
+        while aux < index
+          current = current.next_node
+          aux += 1
+        end
+        StrongTyped.try_clone(current.value)
+      end
+
       def add(element)
         type_check(element)
         SingleLinkedList.new(to_a << element)
       end
 
       def to_a
-        inject([]) { |node| StrongTyped.try_clone(node.value) }
+        inject([]) { |array, element| array << element }
       end
 
       def inject(object, &block)
-        each do |node|
-          object = block.call(object, StrongTyped.try_clone(node.value))
+        each do |element|
+          block.call(object, element)
         end
         object
       end
@@ -60,7 +76,12 @@ module Immutable
       private
 
       def valid_elements?(elements)
-        elements.all? { |element| element.is_a? @type }
+        elements.all? { |element| element.class.to_s == @type }
+      end
+
+      def type_check(element)
+        return if @type.nil?
+        raise ArgumentError unless element.class.to_s == @type
       end
 
       def add_elements(elements)
