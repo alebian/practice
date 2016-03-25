@@ -1,5 +1,5 @@
 class Primes
-  def self.is_prime(number)
+  def self.prime?(number)
     return false if number <= 1
     return true if number == 2
     maximum = Math.sqrt(number).to_i + 1
@@ -9,45 +9,32 @@ class Primes
     true
   end
 
-  def self.primes_list(size)
-    answer = [2]
-    size -= 1
-    number = 3
-    while size > 0
-      while !is_prime(number)
-        number += 2
-      end
-      answer << number
-      size -= 1
-    end
+  def self.list(size)
+    answer = []
+    return answer if size < 1
+    generator = Primes::Generator.new
+    size.times { answer << generator.next }
     answer
   end
 
-  def self.prime_decomposition(number)
-    # decomposition = {}
-    # number = number.to_i
-    # return decomposition if numer < 2
-    # gen = primes_gen()
-    # break_condition = int(math.sqrt(number))
-    # while number > 1:
-    #     current_prime = next(gen)
-    #     if current_prime > break_condition:
-    #         decomposition[number] = 1
-    #         return decomposition
-    #     while number % current_prime == 0 or number == current_prime:
-    #         if current_prime in decomposition:
-    #             decomposition[current_prime] += 1
-    #         else:
-    #             decomposition[current_prime] = 1
-    #         number /= current_prime
-    # decomposition
-  end
+  class Generator
+    def initialize
+      @last_prime = nil
+      @next_candidate = nil
+    end
 
-  def self.get_from_decomposition(decomposition)
-    # result = 1
-    # decomposition.each do |prime|
-    #   result *= prime**decomposition[prime]
-    # end
-    # result
+    def next
+      if @last_prime.nil?
+        @next_candidate = 3
+        @last_prime = 2
+      else
+        while !Primes.prime?(@next_candidate)
+          @next_candidate += 2
+        end
+        answer = @next_candidate
+        @next_candidate += 2
+        answer
+      end
+    end
   end
 end

@@ -1,8 +1,7 @@
-"""This script gives basic prime number functions."""
+"""This module gives basic prime number functions."""
 
 import math
 import itertools
-
 
 def is_prime(number):
     """Checks if a number is prime"""
