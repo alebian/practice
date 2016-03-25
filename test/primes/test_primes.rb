@@ -2,25 +2,30 @@ require_relative '../../primes/primes'
 require 'test/unit'
 
 class TestPrimes < Test::Unit::TestCase
-  def test_is_prime
+  def test_prime?
     primes_list.each do |prime|
-      assert_equal(true, Primes.is_prime(prime))
+      assert_equal(true, Primes.prime?(prime))
     end
   end
 
   def test_primes_list
-    size = 1000
-    list = CPrimes.primes_list(size)
-    assert_equal(size, list.size)
+    size = primes_array.size
+    assert_equal(primes_array, Primes.list(size))
   end
 
   private
 
   def primes_list
-    list = []
-    File.open('primes/primes-list.txt').each do |line|
-      list << line.to_i
+    @primes_list ||= File.open('./primes/primes-list.txt').each_with_object([]) do |line, array|
+      array << line.to_i
+      array
     end
-    return list
+  end
+
+  def primes_array
+    @primes_array ||= primes_list.each_with_object([]) do |prime, array|
+      array << prime
+      array
+    end
   end
 end

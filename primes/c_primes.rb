@@ -1,7 +1,7 @@
 require 'inline'
 
 class CPrimes < Primes
-  def self.is_prime(number)
+  def self.prime?(number)
     result = CExtension.new.is_prime(number)
     result == 1
   end
@@ -20,7 +20,7 @@ class CPrimes < Primes
             return 1;
           }
           double maximum = sqrt((double)number);
-          for (int i = 3; i < maximum; i += 2) {
+          for (long i = 3; i < maximum; i += 2) {
             if (number % i == 0) {
               return 0;
             }
