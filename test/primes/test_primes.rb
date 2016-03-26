@@ -13,6 +13,14 @@ class TestPrimes < Test::Unit::TestCase
     assert_equal(primes_array, Primes.list(size))
   end
 
+  def test_decomposition_composition
+    (1..10_000).each do |number|
+      dec = Primes.decomposition(number)
+      assert_equal(number, dec.to_a.map { |pp| pp[0]**pp[1] }.inject(1) { |r, v| r *= v })
+      assert_equal(number, Primes.compose(dec))
+    end
+  end
+
   private
 
   def primes_list
