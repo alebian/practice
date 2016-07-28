@@ -13,6 +13,11 @@ class TestPrimes < Test::Unit::TestCase
     assert_equal(primes_array, Primes.list(size))
   end
 
+  def test_sieve_of_eratosthenes
+    size = primes_array.size
+    assert_equal(primes_array, Primes.sieve_of_eratosthenes(99991))
+  end
+
   def test_decomposition_composition
     (1..10_000).each do |number|
       dec = Primes.decomposition(number)

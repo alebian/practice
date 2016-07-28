@@ -17,6 +17,26 @@ class Primes
     answer
   end
 
+  def self.sieve_of_eratosthenes(size)
+    number_list = {}
+    (2..size).each { |n| number_list[n] = true }
+    answer = []
+
+    (2..size).each do |number|
+      answer << number if number_list[number]
+
+      aux = 1
+      partial = number
+      while partial <= size
+        number_list[partial] = false
+        aux += 1
+        partial = number * aux
+      end
+    end
+
+    answer
+  end
+
   def self.generator
     Primes::Generator.new
   end
