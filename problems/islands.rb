@@ -6,7 +6,7 @@
 require 'pp'
 require 'set'
 
-original_matrix = [
+ORIGINAL_MATRIX = [
   [1, 0, 1, 1, 1],
   [0, 0, 0, 0, 1],
   [1, 0, 1, 1, 1],
@@ -29,6 +29,8 @@ def matrix_from_file(path)
   matrix
 end
 
+Point = Struct.new(:x, :y)
+
 class IslandsProblemSolver
   attr_reader :matrix
 
@@ -39,66 +41,79 @@ class IslandsProblemSolver
 
   def solve
     @current_symbol = 2
-    i = j = 0
-
-    while i < @n
-      while j < @n
-        element = matrix[i][j]
+    @matrix.each_with_index do |row, i|
+      row.each_with_index do |element, j|
         if element == 1
-          changed = change_recursive(i, j)
+          changed = change_recursive(Point.new(i, j))
           @current_symbol += 1 if changed > 0
         end
-        j += 1
       end
-      j = 0
-      i += 1
     end
     @current_symbol - 2
   end
 
-  def join(i, j)
-    return @current_symbol - 2 if @matrix[i][j] != 0
-    @matrix[i][j] = 'X'
+  def join(point)
+    return @current_symbol - 2 if @matrix[point.x][point.y] != 0
+    @matrix[point.x][point.y] = 'X'
     set = Set.new
-    set.add(get(i - 1, j)) if get(i - 1, j) != 0
-    set.add(get(i + 1, j)) if get(i + 1, j) != 0
-    set.add(get(i, j - 1)) if get(i, j - 1) != 0
-    set.add(get(i, j + 1)) if get(i, j + 1) != 0
+    set.add(get(up(point))) if get(up(point)) != 0
+    set.add(get(down(point))) if get(down(point)) != 0
+    set.add(get(left(point))) if get(left(point)) != 0
+    set.add(get(right(point))) if get(right(point)) != 0
     @current_symbol - 2 - set.size + 1
   end
 
   private
 
-  def change_recursive(i, j)
-    return 0 if @matrix[i][j] == 0
-    @matrix[i][j] = @current_symbol
-    changed = 1
-    changed += change_recursive(i - 1, j) if change?(i - 1, j)
-    changed += change_recursive(i + 1, j) if change?(i + 1, j)
-    changed += change_recursive(i, j - 1) if change?(i, j - 1)
-    changed += change_recursive(i, j + 1) if change?(i, j + 1)
-    changed
-  end
+    def change_recursive(point)
+      return 0 if get(point) == 0
+      @matrix[point.x][point.y] = @current_symbol
+      changed = 1
+      changed += change_recursive(up(point)) if change?(up(point))
+      changed += change_recursive(down(point)) if change?(down(point))
+      changed += change_recursive(left(point)) if change?(left(point))
+      changed += change_recursive(right(point)) if change?(right(point))
+      changed
+    end
 
-  def change?(i, j)
-    return false if i < 0 || i >= @n
-    return false if j < 0 || j >= @n
-    @matrix[i][j] == 1
-  end
+    def change?(point)
+      get(point) == 1
+    end
 
-  def get(i, j)
-    return 0 if i < 0 || i >= @n
-    return 0 if j < 0 || j >= @n
-    @matrix[i][j]
-  end
+    def get(point)
+      return 0 if invalid_position?(point.x)
+      return 0 if invalid_position?(point.y)
+      @matrix[point.x][point.y]
+    end
+
+    def invalid_position?(position)
+      position < 0 || position >= @n
+    end
+
+    def up(point)
+      Point.new(point.x - 1, point.y)
+    end
+
+    def down(point)
+      Point.new(point.x + 1, point.y)
+    end
+
+    def left(point)
+      Point.new(point.x, point.y - 1)
+    end
+
+    def right(point)
+      Point.new(point.x, point.y + 1)
+    end
 end
 
-matrix = ARGV[0] ? matrix_from_file(ARGV[0]) : original_matrix
+matrix = ARGV[0] ? matrix_from_file(ARGV[0]) : ORIGINAL_MATRIX
 
 solver = IslandsProblemSolver.new(matrix)
 puts "Islands: #{solver.solve}"
 pp solver.matrix
+point = Point.new(ARGV[1].to_i, ARGV[2].to_i)
 if ARGV[2]
-  puts "Islands if we unite (#{ARGV[1]}, #{ARGV[2]}) -> #{solver.join(ARGV[1].to_i, ARGV[2].to_i)}"
+  puts "Islands if we unite (#{ARGV[1]}, #{ARGV[2]}) -> #{solver.join(point)}"
   pp solver.matrix
 end
