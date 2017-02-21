@@ -11,8 +11,6 @@ public interface Collection<E> extends Iterable<E> {
 
     boolean containsAll(Collection<? extends E> collection);
 
-    int hashCode();
-
     boolean isEmpty();
 
     boolean remove(E element);

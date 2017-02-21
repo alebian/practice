@@ -26,15 +26,20 @@ public class SingleLinkedList<E> implements List<E> {
             return false;
         }
         if (first == null) {
-            first = new Node<E>(element);
+            first = new Node<>(element);
             last = first;
         } else {
-            Node<E> node = new Node<E>(element);
+            Node<E> node = new Node<>(element);
             last.next = node;
             last = node;
         }
         size++;
         return true;
+    }
+
+    @Override
+    public boolean addFirst(E element) {
+        return add(0, element);
     }
 
     @Override
@@ -45,22 +50,22 @@ public class SingleLinkedList<E> implements List<E> {
             return false;
         }
         if (index == 0) {
-            newNode = new Node<E>(element, first);
+            newNode = new Node<>(element, first);
             first = newNode;
-            return true;
+        } else {
+            int currentIndex = 1;
+            Node<E> current, previous;
+            current = first.next;
+            previous = first;
+            while (currentIndex < index) {
+                previous = current;
+                current = current.next;
+                currentIndex++;
+            }
+            newNode = new Node<>(element, current);
+            previous.next = newNode;
         }
-
-        int currentIndex = 1;
-        Node<E> current, previous;
-        current = first.next;
-        previous = first;
-        while (currentIndex < index) {
-            previous = current;
-            current = current.next;
-            currentIndex++;
-        }
-        newNode = new Node<E>(element, current);
-        previous.next = newNode;
+        size++;
         return true;
     }
 
@@ -93,8 +98,8 @@ public class SingleLinkedList<E> implements List<E> {
 
     @Override
     public List<E> sublist(int fromIndex, int toIndex) {
-        List<E> newList = new SingleLinkedList<E>();
-        if (!validIndex(fromIndex) || !validIndex(toIndex) || toIndex > fromIndex) {
+        List<E> newList = new SingleLinkedList<>();
+        if (!validIndex(fromIndex) || !validIndex(toIndex) || toIndex < fromIndex) {
             return newList;
         }
         int currentIndex = 0;
@@ -116,20 +121,32 @@ public class SingleLinkedList<E> implements List<E> {
         if (!validIndex(index)) {
             return null;
         }
+        E answer;
         if (index == 0) {
-            E answer = first.element;
+            answer = first.element;
             first = first.next;
-            return answer;
+        } else {
+            int currentIndex = 1;
+            Node<E> current;
+            current = first.next;
+            while (currentIndex < index) {
+                current = current.next;
+                currentIndex++;
+            }
+            answer = current.element;
         }
+        size--;
+        return answer;
+    }
 
-        int currentIndex = 1;
-        Node<E> current;
-        current = first.next;
-        while (currentIndex < index) {
-            current = current.next;
-            currentIndex++;
-        }
-        return current.element;
+    @Override
+    public E removeFirst() {
+        return remove(0);
+    }
+
+    @Override
+    public E removeLast() {
+        return remove(size - 1);
     }
 
     @Override
@@ -163,14 +180,15 @@ public class SingleLinkedList<E> implements List<E> {
         }
         first = null;
         last = null;
+        size = 0;
     }
 
     @Override
     public List<E> head() {
         if (first == null) {
-            return new SingleLinkedList<E>();
+            return new SingleLinkedList<>();
         }
-        List<E> newList = new SingleLinkedList<E>();
+        List<E> newList = new SingleLinkedList<>();
         newList.add(first.element);
         return newList;
     }
@@ -178,15 +196,39 @@ public class SingleLinkedList<E> implements List<E> {
     @Override
     public List<E> tail() {
         if (first == null) {
-            return new SingleLinkedList<E>();
+            return new SingleLinkedList<>();
         }
-        List<E> newList = new SingleLinkedList<E>();
+        List<E> newList = new SingleLinkedList<>();
         Node<E> current = first.next;
         while (current != null) {
             newList.add(current.element);
             current = current.next;
         }
         return newList;
+    }
+
+    @Override
+    public E get(int index) {
+        if (isEmpty() || !validIndex(index)) {
+            return null;
+        }
+        int currentIndex = 0;
+        Node<E> current = first;
+        while (currentIndex < index) {
+            current = current.next;
+            currentIndex++;
+        }
+        return current.element;
+    }
+
+    @Override
+    public E getFirst() {
+        return get(0);
+    }
+
+    @Override
+    public E getLast() {
+        return get(size - 1);
     }
 
     @Override
@@ -214,7 +256,7 @@ public class SingleLinkedList<E> implements List<E> {
     }
 
     private boolean validIndex(int index) {
-        return index >= 0 && index < size;
+        return index == 0 || index > 0 && index < size;
     }
 
     @Override
@@ -228,10 +270,7 @@ public class SingleLinkedList<E> implements List<E> {
         Node<E> previousPrevious = null;
 
         public boolean hasNext() {
-            if (current == null) {
-                return false;
-            }
-            return true;
+            return current != null;
         }
 
         public E next() {
@@ -245,28 +284,28 @@ public class SingleLinkedList<E> implements List<E> {
         public void remove() {
             if (previous == null) {
                 return;
-            }
-            if (previousPrevious == null) {
+            } else if (previousPrevious == null) {
                 first = current;
                 if (first == null) {
                     last = null;
                 }
+            } else {
+                previousPrevious.next = current;
+                previous = null;
             }
-            previousPrevious.next = current;
-            previous = null;
             size--;
         }
     }
 
-    private class Node<E> {
-        E element;
-        Node<E> next;
+    private class Node<T> {
+        T element;
+        Node<T> next;
 
-        public Node(E element) {
+        Node(T element) {
             this.element = element;
         }
 
-        public Node(E element, Node<E> node) {
+        Node(T element, Node<T> node) {
             this.element = element;
             this.next = node;
         }

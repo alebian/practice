@@ -5,7 +5,7 @@ import java.util.Comparator;
 public interface List<E> extends Collection<E> {
     boolean add(int index, E element);
 
-    boolean addAll(Collection<? extends E> collection);
+    boolean addFirst(E element);
 
     int indexOf(E element);
 
@@ -15,7 +15,17 @@ public interface List<E> extends Collection<E> {
 
     E remove(int index);
 
+    E removeLast();
+
+    E removeFirst();
+
     List<E> head();
 
     List<E> tail();
+
+    E get(int index);
+
+    E getFirst();
+
+    E getLast();
 }

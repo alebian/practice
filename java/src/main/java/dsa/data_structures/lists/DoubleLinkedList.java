@@ -18,6 +18,11 @@ public class DoubleLinkedList<E> implements List<E> {
     }
 
     @Override
+    public boolean addFirst(E element) {
+        return false;
+    }
+
+    @Override
     public boolean addAll(Collection<? extends E> collection) {
         return false;
     }
@@ -43,12 +48,37 @@ public class DoubleLinkedList<E> implements List<E> {
     }
 
     @Override
+    public E removeLast() {
+        return null;
+    }
+
+    @Override
+    public E removeFirst() {
+        return null;
+    }
+
+    @Override
     public List<E> head() {
         return null;
     }
 
     @Override
     public List<E> tail() {
+        return null;
+    }
+
+    @Override
+    public E get(int index) {
+        return null;
+    }
+
+    @Override
+    public E getFirst() {
+        return null;
+    }
+
+    @Override
+    public E getLast() {
         return null;
     }
 
