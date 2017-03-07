@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     benchmark-ips (2.6.1)
+    colorize (0.8.1)
     domain_name (0.5.20160615)
       unf (>= 0.0.5, < 1.0.0)
     highline (1.7.8)
@@ -34,6 +35,7 @@ PLATFORMS
 
 DEPENDENCIES
   benchmark-ips
+  colorize
   inline
   json
   nokogiri
@@ -42,4 +44,4 @@ DEPENDENCIES
   rest-client
 
 BUNDLED WITH
-   1.12.5
+   1.13.6
