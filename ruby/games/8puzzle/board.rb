@@ -8,13 +8,23 @@
 #   T7 T8 T9
 #
 module EightPuzzle
+  class InvalidMoveError < StandardError ; end
+
+  class UnsolvableBoardError < StandardError
+    attr_reader :inversions
+
+    def initialize(inversions)
+      @inversions = inversions
+    end
+  end
+
   class Board
     KEYS = [:T1, :T2, :T3, :T4, :T5, :T6, :T7, :T8, :T9]
 
     WINNING_GRID = {
       T1: 1, T2: 2, T3: 3,
-      T4: 8, T5: 0, T6: 4,
-      T7: 7, T8: 6, T9: 5
+      T4: 4, T5: 5, T6: 6,
+      T7: 7, T8: 8, T9: 0
     }
 
     VALID_MOVEMENTS = {
@@ -29,8 +39,6 @@ module EightPuzzle
       T9: [:T6, :T8]
     }
 
-    class InvalidMoveError < StandardError ; end
-
     def self.generate_random
       numbers = (0..8).to_a
       grid = {}
@@ -39,7 +47,10 @@ module EightPuzzle
         numbers.delete(num)
         grid[key] = num
       end
+      check_if_solvable!(grid)
       self.new(grid)
+    rescue
+      generate_random
     end
 
     attr_reader :previous_movements, :grid
@@ -81,6 +92,7 @@ module EightPuzzle
     end
 
     def solve
+      Board.check_if_solvable!(@grid)
       # BFS
       queue = []
       queue.push(self)
@@ -100,6 +112,20 @@ module EightPuzzle
     end
 
     private
+
+    def self.check_if_solvable!(grid)
+      numbers = []
+      KEYS.each do |key|
+        numbers << grid[key] if grid[key] != 0
+      end
+      inversions = 0
+      for i in (0..6)
+        for j in ((i+1)..7)
+          inversions += 1 if numbers[i] > numbers[j]
+        end
+      end
+      raise UnsolvableBoardError.new(inversions) if inversions % 2 != 0
+    end
 
     def valid_movements
       VALID_MOVEMENTS[@zero_position]
