@@ -12,8 +12,8 @@ UNSOLVABLE_BOARD = {
   T7: 8, T8: 7, T9: 0
 }
 
-# board = EightPuzzle::Board.new(EASY_GRID)
-# board = EightPuzzle::Board.new(UNSOLVABLE_BOARD)
+# current_board = EightPuzzle::Board.new(EASY_GRID)
+# current_board = EightPuzzle::Board.new(UNSOLVABLE_BOARD)
 current_board = EightPuzzle::Board.generate_random
 
 def print_board(board)

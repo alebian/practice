@@ -94,14 +94,16 @@ module EightPuzzle
     def solve
       Board.check_if_solvable!(@grid)
       # BFS
+      already_checked = []
       queue = []
       queue.push(self)
       while !queue.empty?
         current = queue.shift
         return current if current.finished?
         current.next_moves.each do |move|
-          queue.push(move) unless queue.include?(move)
+          queue.push(move) unless queue.include?(move) || already_checked.include?(move)
         end
+        already_checked << current
       end
     end
 
