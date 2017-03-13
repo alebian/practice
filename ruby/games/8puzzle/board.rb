@@ -1,3 +1,4 @@
+require 'set'
 # This is a little experiment:
 # Solve the 8 puzzle game using a Hash as a data structure instead of a more "natural" data
 # structure like a matrix or vector.
@@ -79,6 +80,14 @@ module EightPuzzle
       @grid == board.grid
     end
 
+    def eql?(board)
+      board == self
+    end
+
+    def hash
+      @grid.hash
+    end
+
     def finished?
       @grid == WINNING_GRID
     end
@@ -94,7 +103,7 @@ module EightPuzzle
     def solve
       Board.check_if_solvable!(@grid)
       # BFS
-      already_checked = []
+      already_checked = Set.new
       queue = []
       queue.push(self)
       while !queue.empty?
@@ -103,7 +112,7 @@ module EightPuzzle
         current.next_moves.each do |move|
           queue.push(move) unless queue.include?(move) || already_checked.include?(move)
         end
-        already_checked << current
+        already_checked.add(current)
       end
     end
 
