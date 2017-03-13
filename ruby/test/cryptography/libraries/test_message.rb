@@ -1,5 +1,5 @@
-require_relative '../../cryptography/message'
-require_relative '../../cryptography/rsa_keys'
+require_relative '../../../cryptography/libraries/message'
+require_relative '../../../cryptography/libraries/rsa_keys'
 require 'test/unit'
 
 class TestMessage < Test::Unit::TestCase
