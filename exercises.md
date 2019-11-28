@@ -117,3 +117,56 @@ public class Main {
     }
 }
 ```
+
+## Linked lists
+
+### Sort a linked list
+
+#### O(N log N) solution
+
+```java
+class Solution {
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode mid = findMiddleAndSplit(head);
+        ListNode left = sortList(head);
+        ListNode right = sortList(mid);
+        ListNode ret = merge(left, right);
+        return ret;
+    }
+
+    private ListNode findMiddleAndSplit(ListNode node) {
+        ListNode slow, fast, preSlow = null;
+        slow = fast = node;
+        while (fast != null && fast.next != null) {
+            preSlow = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        
+        preSlow.next = null;
+        return slow;
+    }
+
+    private ListNode merge(ListNode left, ListNode right) {
+        ListNode dummyHead = new ListNode(0);
+        ListNode current = dummyHead;
+
+        while (left != null && right != null) {
+            if (left.val <= right.val) {
+                current.next = left;
+                left = left.next;
+            } else {
+                current.next = right;
+                right = right.next;
+            }
+            current = current.next;
+        }
+
+        curr.next = (left != null) ? left : right;
+        return dummyHead.next;
+    }
+}
