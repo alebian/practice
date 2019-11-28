@@ -170,3 +170,26 @@ class Solution {
         return dummyHead.next;
     }
 }
+
+## Merge sort like indexes
+
+This piece of code will return for the first run:
+
+`0, 2, 4, 6, 8, ...`
+
+Second run:
+
+`0, 4, 8, ...`
+
+Third run:
+
+`0, 8, ...`
+
+```java
+int interval = 1;
+while (interval < length) {
+    for (int i = 0; i + interval < length; i = i + interval * 2) {
+        doSomething()
+    }
+    interval *= 2;
+}
