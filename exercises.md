@@ -170,6 +170,7 @@ class Solution {
         return dummyHead.next;
     }
 }
+```
 
 ## Merge sort like indexes
 
@@ -193,3 +194,4 @@ while (interval < length) {
     }
     interval *= 2;
 }
+```
