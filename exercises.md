@@ -510,3 +510,17 @@ class Solution {
     }
 }
 ```
+
+## X ^ Y
+
+```ruby
+def pow(x, y)
+    return nil if x == 0 && y == 0
+    return 0 if x == 0
+    return 1 if y == 0
+
+    tmp = pow(x, y / 2)
+    return tmp * tmp if y % 2 == 0
+    x * tmp * tmp
+end
+```
