@@ -19,7 +19,7 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
-    pg (0.18.4)
+    pg (1.2.3)
     pkg-config (1.1.7)
     redis (3.3.1)
     rest-client (2.0.0)
